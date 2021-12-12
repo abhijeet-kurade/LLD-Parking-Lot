@@ -8,7 +8,7 @@ public abstract class Account {
 
     public Account(AccountType accountType, String name, String phoneNumber) {
         this.accountType = accountType;
-        this.accountId = accountId;
+        this.accountId = AccountIds.getInstance().getNextUserId();
         this.name = name;
         this.phoneNumber = phoneNumber;
     }

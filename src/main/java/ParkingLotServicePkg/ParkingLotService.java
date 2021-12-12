@@ -1,4 +1,4 @@
-package ParkingLotService;
+package ParkingLotServicePkg;
 
 import Account.*;
 import PakingLot.Floor;
@@ -33,59 +33,9 @@ public class ParkingLotService {
         return guest.getAccountId();
     }
 
-    class TicketToUser{
-        int ticketNumber;
-        String name;
-        String accountId;
-        String entry;
-        String exit;
-        String vehicleType;
-        String number;
-        String color;
-        String floor;
-        String spot;
 
-        public TicketToUser(int ticketNumber, String name, String accountId, String entry, String vehicleType, String number, String color, String floor, String spot) {
-            this.ticketNumber = ticketNumber;
-            this.name = name;
-            this.accountId = accountId;
-            this.entry = entry;
-            this.vehicleType = vehicleType;
-            this.number = number;
-            this.color = color;
-            this.floor = floor;
-            this.spot = spot;
-        }
-
-        public TicketToUser(int ticketNumber, String name, String accountId, String entry, String exit, String vehicleType, String number, String color, String floor, String spot) {
-            this.ticketNumber = ticketNumber;
-            this.name = name;
-            this.accountId = accountId;
-            this.entry = entry;
-            this.exit = exit;
-            this.vehicleType = vehicleType;
-            this.number = number;
-            this.color = color;
-            this.floor = floor;
-            this.spot = spot;
-        }
-
-        @Override
-        public String toString() {
-            return "TicketToUser{" +
-                    "Ticket Number=" + ticketNumber +
-                    ", Name='" + name + '\'' +
-                    ", Account='" + accountId + '\'' +
-                    ", Entry='" + entry + '\'' +
-                    ", Exit='" + exit + '\'' +
-                    ", Vehicle Type='" + vehicleType + '\'' +
-                    ", Number ='" + number + '\'' +
-                    ", Color='" + color + '\'' +
-                    ", Floor='" + floor + '\'' +
-                    ", Spot Number='" + spot + '\'' +
-                    '}';
-        }
-
+    public TicketToUser park(int accountNumber, VehicleType vehicleType, String vehicleNumber, VehicleColor color ){
+        return park(AccountType.USER, accountNumber, vehicleType, vehicleNumber, color);
     }
 
     public TicketToUser park(AccountType accountType, int accountNumber, VehicleType vehicleType, String vehicleNumber, VehicleColor color) {
@@ -93,7 +43,7 @@ public class ParkingLotService {
         if (accountType == AccountType.GUEST) account = (Guest) this.accounts.get(accountNumber);
         else account = (User) this.accounts.get(accountNumber);
         Vehicle vehicle = new Vehicle(account, vehicleType, vehicleNumber, color);
-        for (int i = 0; i < this.parkingLot.getNumberOfFloors(); i++) {
+        for (int i = 1; i <= this.parkingLot.getNumberOfFloors(); i++) {
             String floorName = "Floor" + i;
             Floor floor = this.parkingLot.getFloor(floorName);
             if (floor.isFloorFull()) continue;
@@ -145,7 +95,7 @@ public class ParkingLotService {
         System.out.println(floorName);
         for(Spot spot : spots){
             int spotNumber = spot.getSpotNumber();
-            String vehicle = spot.isEmpty() ? spot.getVehicle().getVehicleNumber() : "Empty";
+            String vehicle = !spot.isEmpty() ? spot.getVehicle().getVehicleNumber() : "Empty";
             System.out.print(spotNumber +" : "+ vehicle + "  ");
         }
         System.out.println();

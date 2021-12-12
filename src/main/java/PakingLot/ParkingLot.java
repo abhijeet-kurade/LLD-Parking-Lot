@@ -19,7 +19,7 @@ public class ParkingLot {
         for (int i=1; i<=numberOfFloors; i++){
             String floorName = "Floor" + i;
             Strategy strategy = new Strategy1(new ArrayList<>());
-            this.floors.put(floorName, new Floor(floorName, 10, strategy));
+            this.floors.put(floorName, new Floor(floorName, 5, strategy));
         }
     }
 

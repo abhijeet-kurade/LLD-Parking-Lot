@@ -15,14 +15,23 @@ public class ParkingLot {
     public ParkingLot(String name, int numberOfFloors) {
         this.name = name;
         this.numberOfFloors = numberOfFloors;
+        this.floors = new HashMap<>();
         for (int i=1; i<=numberOfFloors; i++){
-            String floorName = "Floor" + 1;
+            String floorName = "Floor" + i;
             Strategy strategy = new Strategy1(new ArrayList<>());
-            this.floors.put(floorName, new Floor(floorName, 20, strategy));
+            this.floors.put(floorName, new Floor(floorName, 10, strategy));
         }
     }
 
     public Floor getFloor(String floorName){
         return this.floors.get(floorName);
+    }
+
+    public int getNumberOfFloors() {
+        return numberOfFloors;
+    }
+
+    public HashMap<String, Floor> getFloors() {
+        return floors;
     }
 }

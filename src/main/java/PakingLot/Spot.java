@@ -38,6 +38,10 @@ public class Spot {
         return spotNumber;
     }
 
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
     public boolean isEmpty() {
         return isEmpty;
     }

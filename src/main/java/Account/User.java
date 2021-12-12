@@ -3,41 +3,38 @@ package Account;
 import Ticket.Ticket;
 import Vehicle.Vehicle;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class User extends Account{
-    private int userId;
-    private String userName;
     private String password;
-    private String phoneNumber;
-    private List<Vehicle> vehicles;
-    private List<Ticket> tickets;
+    private HashMap<String, Vehicle> vehicles;
+    private HashMap<Integer, Ticket> tickets;
 
     public User(String userName, String password, String phoneNumber) {
-        super(AccountType.USER);
-        this.userId = GetUserNumber.getInstance().getNextUserId();
-        this.userName = userName;
+        super(AccountType.USER, userName, phoneNumber);
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        this.tickets = new HashMap<>();
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
 
     public String getPassword() {
         return password;
     }
 
     public void addVehicle(Vehicle vehicle){
-        this.vehicles.add(vehicle);
+        this.vehicles.put(vehicle.getVehicleNumber(), vehicle);
     }
 
     public void addTicket(Ticket ticket){
-        this.tickets.add(ticket);
+        this.tickets.put(ticket.getTicketNumber(), ticket);
+    }
+
+    public Vehicle getVehicles(String number) {
+        return vehicles.get(number);
+    }
+
+    public Ticket getTickets(int number) {
+        return tickets.get(number);
     }
 }

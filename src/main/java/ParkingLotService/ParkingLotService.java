@@ -3,10 +3,12 @@ package ParkingLotService;
 import Account.*;
 import PakingLot.Floor;
 import PakingLot.ParkingLot;
+import PakingLot.Spot;
 import Ticket.*;
 import Vehicle.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class ParkingLotService {
     private ParkingLot parkingLot;
@@ -21,32 +23,132 @@ public class ParkingLotService {
 
     public int createUserAccount(String name, String password, String phoneNumber){
         User user = new User(name, password, phoneNumber);
-        this.accounts.put(user.getUserId(), user);
-        return user.getUserId();
+        this.accounts.put(user.getAccountId(), user);
+        return user.getAccountId();
     }
 
     public int createGuestAccount(String name, String phoneNumber){
         Guest guest = new Guest(name, phoneNumber);
-        this.accounts.put(guest.getGuestId(), guest);
-        return guest.getGuestId();
+        this.accounts.put(guest.getAccountId(), guest);
+        return guest.getAccountId();
     }
 
-    class Ticket{
+    class TicketToUser{
         int ticketNumber;
         String name;
+        String accountId;
         String entry;
         String exit;
         String vehicleType;
-        String number;  
+        String number;
+        String color;
+        String floor;
+        String spot;
+
+        public TicketToUser(int ticketNumber, String name, String accountId, String entry, String vehicleType, String number, String color, String floor, String spot) {
+            this.ticketNumber = ticketNumber;
+            this.name = name;
+            this.accountId = accountId;
+            this.entry = entry;
+            this.vehicleType = vehicleType;
+            this.number = number;
+            this.color = color;
+            this.floor = floor;
+            this.spot = spot;
+        }
+
+        public TicketToUser(int ticketNumber, String name, String accountId, String entry, String exit, String vehicleType, String number, String color, String floor, String spot) {
+            this.ticketNumber = ticketNumber;
+            this.name = name;
+            this.accountId = accountId;
+            this.entry = entry;
+            this.exit = exit;
+            this.vehicleType = vehicleType;
+            this.number = number;
+            this.color = color;
+            this.floor = floor;
+            this.spot = spot;
+        }
+
+        @Override
+        public String toString() {
+            return "TicketToUser{" +
+                    "Ticket Number=" + ticketNumber +
+                    ", Name='" + name + '\'' +
+                    ", Account='" + accountId + '\'' +
+                    ", Entry='" + entry + '\'' +
+                    ", Exit='" + exit + '\'' +
+                    ", Vehicle Type='" + vehicleType + '\'' +
+                    ", Number ='" + number + '\'' +
+                    ", Color='" + color + '\'' +
+                    ", Floor='" + floor + '\'' +
+                    ", Spot Number='" + spot + '\'' +
+                    '}';
+        }
+
     }
 
-    public int park(AccountType accountType, int accountNumber, VehicleType vehicleType,
-                    String vehicleNumber, VehicleColor color){
+    public TicketToUser park(AccountType accountType, int accountNumber, VehicleType vehicleType, String vehicleNumber, VehicleColor color) {
         Account account;
-        if(accountType == AccountType.GUEST) account = (Guest)this.accounts.get(accountNumber);
-        else account = (User)this.accounts.get(accountNumber);
+        if (accountType == AccountType.GUEST) account = (Guest) this.accounts.get(accountNumber);
+        else account = (User) this.accounts.get(accountNumber);
         Vehicle vehicle = new Vehicle(account, vehicleType, vehicleNumber, color);
+        for (int i = 0; i < this.parkingLot.getNumberOfFloors(); i++) {
+            String floorName = "Floor" + i;
+            Floor floor = this.parkingLot.getFloor(floorName);
+            if (floor.isFloorFull()) continue;
+            int spotNumber = floor.park(vehicle);
+            Spot spot = floor.getSpot(spotNumber);
+            Ticket ticket = new Ticket(vehicle, floor, spot, account);
+            this.tickets.put(ticket.getTicketNumber(), ticket);
 
-        return -1;
+            TicketToUser ticketToUser = new TicketToUser(ticket.getTicketNumber(), account.getName(), String.valueOf(account.getAccountId()),
+                    ticket.getStart().toString(), vehicleType.toString(), vehicleNumber, color.toString(), floorName, String.valueOf(spotNumber));
+
+            return ticketToUser;
+        }
+
+        return null;
     }
+
+    public TicketToUser freeSpot(int ticketNumber){
+        Ticket ticket = this.tickets.get(ticketNumber);
+        Floor floor = ticket.getFloor();
+        floor.freeSpot(ticket.getSpot().getSpotNumber());
+        ticket.completeEntry();
+        Account account = ticket.getAccount();
+        Vehicle vehicle = ticket.getVehicle();
+        TicketToUser ticketToUser = new TicketToUser(ticket.getTicketNumber(), account.getName(), String.valueOf(account.getAccountId()),
+                ticket.getStart().toString(), ticket.getEnd().toString(),  vehicle.getVehicleType().toString(), vehicle.getVehicleNumber(), vehicle.getColor().toString(), floor.getFloorName(), String.valueOf(ticket.getSpot().getSpotNumber()));
+
+        return ticketToUser;
+    }
+
+    public void showParkingLot(){
+        HashMap<String, Floor> floors = this.parkingLot.getFloors();
+        for(String floorName : floors.keySet()){
+            System.out.println(floorName);
+            Floor floor = floors.get(floorName);
+            List<Spot> spots = floor.getSpots();
+            for(Spot spot : spots){
+                int spotNumber = spot.getSpotNumber();
+                String vehicle = !spot.isEmpty() ? spot.getVehicle().getVehicleNumber() : "Empty";
+                System.out.print(spotNumber +" : "+ vehicle + "  ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void showParkingLotFloor(String floorName){
+        Floor floor = this.parkingLot.getFloor(floorName);
+        List<Spot> spots = floor.getSpots();
+        System.out.println(floorName);
+        for(Spot spot : spots){
+            int spotNumber = spot.getSpotNumber();
+            String vehicle = spot.isEmpty() ? spot.getVehicle().getVehicleNumber() : "Empty";
+            System.out.print(spotNumber +" : "+ vehicle + "  ");
+        }
+        System.out.println();
+    }
+
 }

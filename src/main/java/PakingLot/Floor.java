@@ -25,6 +25,10 @@ public class Floor {
         }
     }
 
+    public String getFloorName() {
+        return floorName;
+    }
+
     public int park(Vehicle vehicle){
         if(strategy.isFloorFull()) return -1;
         Spot spot = strategy.getNextAvailableSpot();
@@ -43,5 +47,9 @@ public class Floor {
     }
     public boolean isFloorFull(){
         return this.strategy.isFloorFull();
+    }
+
+    public List<Spot> getSpots() {
+        return spots;
     }
 }

@@ -18,9 +18,15 @@ public class Vehicle {
     }
 
 
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
     public String getVehicleNumber() {
         return vehicleNumber;
     }
+
+
 
     public VehicleColor getColor() {
         return color;

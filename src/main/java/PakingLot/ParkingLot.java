@@ -6,16 +6,17 @@ import ParkingStrategy.Strategy1;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class ParkingLot {
     private String name;
     private int numberOfFloors;
-    private HashMap<String, Floor> floors;
+    private TreeMap<String, Floor> floors;
 
     public ParkingLot(String name, int numberOfFloors) {
         this.name = name;
         this.numberOfFloors = numberOfFloors;
-        this.floors = new HashMap<>();
+        this.floors = new TreeMap<>();
         for (int i=1; i<=numberOfFloors; i++){
             String floorName = "Floor" + i;
             Strategy strategy = new Strategy1(new ArrayList<>());
@@ -31,7 +32,7 @@ public class ParkingLot {
         return numberOfFloors;
     }
 
-    public HashMap<String, Floor> getFloors() {
+    public TreeMap<String, Floor> getFloors() {
         return floors;
     }
 }

@@ -6,7 +6,7 @@ import Vehicle.VehicleType;
 
 public class MainClass {
     public static void main(String[] args) {
-        testCase2();
+        testCase1();
     }
 
     public static void testCase1(){
@@ -38,6 +38,8 @@ public class MainClass {
 
         parkingLot.freeSpot(guest3Ticket.getTicketNumber());
         parkingLot.freeSpot(guest4Ticket.getTicketNumber());
+        parkingLot.freeSpot(guest2Ticket.getTicketNumber());
+        parkingLot.freeSpot(guest3Ticket.getTicketNumber());
         TicketToUser guest9Ticket = parkingLot.park(AccountType.GUEST, guest9, VehicleType.CAR, "MH1-9800", VehicleColor.BLUE);
 
         parkingLot.showParkingLot();
@@ -46,7 +48,6 @@ public class MainClass {
 
     public static void testCase2() {
         ParkingLotService parkingLot = new ParkingLotService("Parking Lot", 3);
-        //int guest1 = parkingLot.createGuestAccount("Abhijeet", "9970188701");
         int user1 = parkingLot.createUserAccount("Abhijeet","12345", "9970188701");
         TicketToUser guest1Ticket = parkingLot.park(user1, VehicleType.CAR, "MH1-5213", VehicleColor.BLACK);
         parkingLot.showParkingLot();

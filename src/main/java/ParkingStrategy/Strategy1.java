@@ -45,6 +45,10 @@ public class Strategy1 extends Strategy{
     }
 
     public boolean freeSpot(int spotNumber) {
+        if(this.parkedSpot.get(spotNumber) == null) {
+            System.out.println("Spot "+spotNumber+" is already freed");
+            return false;
+        }
         Spot spot = this.parkedSpot.remove(spotNumber);
         this.emptySpots.add(spot);
         return true;

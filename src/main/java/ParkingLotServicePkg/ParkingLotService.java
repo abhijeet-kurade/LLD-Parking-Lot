@@ -9,6 +9,7 @@ import Vehicle.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class ParkingLotService {
     private ParkingLot parkingLot;
@@ -75,7 +76,7 @@ public class ParkingLotService {
     }
 
     public void showParkingLot(){
-        HashMap<String, Floor> floors = this.parkingLot.getFloors();
+        TreeMap<String, Floor> floors = this.parkingLot.getFloors();
         for(String floorName : floors.keySet()){
             System.out.println(floorName);
             Floor floor = floors.get(floorName);
